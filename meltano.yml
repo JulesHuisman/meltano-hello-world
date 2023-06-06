@@ -1,0 +1,24 @@
+version: 1
+default_environment: dev
+project_id: dc4f9207-09af-4b9d-8412-a1a433047409
+environments:
+  - name: dev
+  - name: staging
+  - name: prod
+plugins:
+  extractors:
+    - name: tap-carbon-intensity
+      variant: meltano
+      pip_url: git+https://gitlab.com/meltano/tap-carbon-intensity.git
+  loaders:
+    - name: target-jsonl
+      variant: andyh1203
+      pip_url: target-jsonl
+schedules:
+  - name: weekly
+    job: weekly-refresh
+    interval: "@weekly"
+jobs:
+  - name: weekly-refresh
+    tasks:
+      - tap-carbon-intensity target-jsonl
